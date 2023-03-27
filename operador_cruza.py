@@ -1,0 +1,47 @@
+import random
+
+#Cruza de dos puntos
+def cruza_dos_puntos(poblacion, indices):
+    
+    #Obtenemos la longitud de la poblacion
+    tam_poblacion = len(poblacion)
+    
+    hijos = []
+    
+    for i in range(0, tam_poblacion, 2):
+        
+        parent1 = poblacion[indices[i]].vector_solution
+        parent2 = poblacion[indices[i + 1]].vector_solution
+    
+        # Seleccionar dos puntos de corte aleatorios
+        point1 = random.randint(0, len(parent1) - 1)
+        point2 = random.randint(0, len(parent1) - 1)
+
+        # Ordenar los puntos de menor a mayor
+        start = min(point1, point2)
+        end = max(point1, point2)
+
+        # Crear los descendientes
+        child1 = parent1[:start] + parent2[start:end] + parent1[end:]
+        child2 = parent2[:start] + parent1[start:end] + parent2[end:]
+
+        hijos.append(child1)
+        hijos.append(child2)
+
+    return hijos
+
+def cruza_uniforme(parent1, parent2, prob):
+    # Crear los descendientes
+    child1 = []
+    child2 = []
+
+    # Cruzamiento uniforme
+    for i in range(len(parent1)):
+        if random.random() < prob:
+            child1.append(parent1[i])
+            child2.append(parent2[i])
+        else:
+            child1.append(parent2[i])
+            child2.append(parent1[i])
+
+    return child1, child2
