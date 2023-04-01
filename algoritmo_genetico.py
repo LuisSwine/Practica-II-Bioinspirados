@@ -10,7 +10,7 @@ import survivors_selection as ss
 import poblacion
 import cromosoma
 
-def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cruza_method, prob_mutacion):
+def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cruza_method, prob_mutacion, prob_cruza):
   
   #PRIMERO GENERAMOS LA POBLACION INICIAL
   poblacion_inicial = poblacion.Poblacion(tam_poblacion, dimensiones, lim_inf, lim_sup)
@@ -28,17 +28,19 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
   val_prom = (mejores[0].fitness + peores[0].fitness) / 2
   promedio.append(val_prom)  
   
-  while sr.stop_requeriment(0, mejores[len(mejores) - 1], 0.001):
-    
+  while sr.stop_requeriment(0, mejores[-1], 0.001) and sr.second_stop_option(mejores[-1], peores[-1], 0.001):
     #CREAMOS LAS PAREJAS OBTENIENDO LA LISTA DE INDICES SELECCIONADOS EN ESTE CASO POR RULETA
     indices_padres = ps.seleccion_por_ruleta(poblacion_inicial.poblacion)
-    print(f"Indices: {indices_padres}")
+    #print(f"Indices: {indices_padres}")
 
     #APLICAMOS LA CRUZA
     hijos = []
     if cruza_method == 1:
       hijos  = cruza.cruza_dos_puntos(poblacion_inicial.poblacion, indices_padres)
-      print(f"Hijos: {hijos}")
+      #print(f"Hijos: {hijos}")
+    elif cruza_method == 2:
+      hijos = cruza.cruza_uniforme(poblacion_inicial.poblacion, indices_padres, prob_cruza)
+      #print(f"Hijos: {hijos}")
       
     #Convertimos cada vector hijo en un objeto de la clase cromosoma para acceder a todos sus atributos
     cromosomas_hijos = []
@@ -67,7 +69,8 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
       poblacion_inicial.poblacion.append(hijo)
     
     #SELECCIONAMOS A LOS SOBREVIVIENTES
-    poblacion_inicial.poblacion = ss.seleccion_sobrevivientes_torneo(poblacion_inicial.poblacion, tam_poblacion, 2)
+    #poblacion_inicial.poblacion = ss.seleccion_sobrevivientes_torneo(poblacion_inicial.poblacion, tam_poblacion, 4)
+    poblacion_inicial.poblacion = ss.seleccion_por_extincion(poblacion_inicial.poblacion, tam_poblacion)
     poblacion_inicial.printPoblacion()
     
     #Procedemos a sacar los mejores y peores candidatos
@@ -80,20 +83,21 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
     print(mejores[-1].fitness)
     print(peores[-1].fitness)
     
-    input('PRESIONE...')
+    #input('PRESIONE...')
   pass
 
 if __name__ == "__main__":
   
-  dimensiones = 10
-  lim_inf = -0.5
-  lim_sup = 0.5
-  tam_poblacion = 6
-  function = functions.esfera
-  cruza_method = 1
-  prob_mutacion = 0.2
+  dimensiones = 5
+  lim_inf = -5.12
+  lim_sup = 5.12
+  tam_poblacion = 20
+  function = functions.ackleyFunction
+  cruza_method = 2
+  prob_mutacion = 0.01
+  prob_cruza = 0.5
   
-  algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, function, cruza_method, prob_mutacion)
+  algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, function, cruza_method, prob_mutacion, prob_cruza)
 
     
 

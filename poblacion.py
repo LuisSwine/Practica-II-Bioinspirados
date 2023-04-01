@@ -12,7 +12,7 @@ class Poblacion:
         self.lim_sup = lim_sup #Limite superior de las soluciones
         
         #Creamos las variables de codificacion
-        self.cromosomas_length = coder.calculate_lenght(lim_inf, lim_sup, 2)
+        self.cromosomas_length = coder.calculate_lenght(lim_inf, lim_sup, 3)
         self.num_steps = coder.calculate_num_steps(self.cromosomas_length)
         self.step_size = coder.calculate_step_size(lim_inf, lim_sup, self.num_steps)
         
@@ -42,7 +42,6 @@ class Poblacion:
         poblacion_ordenada = sorted(self.poblacion, key= lambda x: x.fitness)
         best = poblacion_ordenada[0]
         return best
-        
     
     def getWorst(self, funcion):
         #Primero asignamos todos los fitness a cada cromosoma

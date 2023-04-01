@@ -10,6 +10,7 @@ def calculate_step_size(min_value, max_value, num_steps):
 def calculate_lenght(min_value, max_value, precision):
     argument = 10 ** precision
     length = math.log2((max_value * argument) - (min_value * argument))
+    length = math.ceil(length)
     return int(length)
 
 # Función para codificar una solución en un cromosoma binario
@@ -36,7 +37,10 @@ def decode_solution(chromosome, chromosome_length, min_value, step_size):
         solution.append(dimension_value)
     return solution
 
-""" # Ejemplo de uso
+
+""" 
+calculate_lenght(-5.12,5.12,3)
+# Ejemplo de uso
 # Crear una solución aleatoria
 solution = [random.uniform(min_value, max_value) for i in range(10)]
 # Codificar la solución en un cromosoma binario

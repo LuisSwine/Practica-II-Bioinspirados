@@ -30,18 +30,30 @@ def cruza_dos_puntos(poblacion, indices):
 
     return hijos
 
-def cruza_uniforme(parent1, parent2, prob):
-    # Crear los descendientes
-    child1 = []
-    child2 = []
+def cruza_uniforme(poblacion, indices, prob_cruza):
+    
+    tam_poblacion = len(poblacion)
+    
+    hijos = []
+    
+    for i in range(0, tam_poblacion, 2):
+        parent1 = poblacion[indices[i]].vector_solution
+        parent2 = poblacion[indices[i+1]].vector_solution
+    
+        # Crear los descendientes
+        child1 = []
+        child2 = []
 
-    # Cruzamiento uniforme
-    for i in range(len(parent1)):
-        if random.random() < prob:
-            child1.append(parent1[i])
-            child2.append(parent2[i])
-        else:
-            child1.append(parent2[i])
-            child2.append(parent1[i])
+        # Cruzamiento uniforme
+        for i in range(len(parent1)):
+            if random.random() < prob_cruza:
+                child1.append(parent1[i])
+                child2.append(parent2[i])
+            else:
+                child1.append(parent2[i])
+                child2.append(parent1[i])
 
-    return child1, child2
+        hijos.append(child1)
+        hijos.append(child2)
+    
+    return hijos
