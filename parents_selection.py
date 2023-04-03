@@ -11,6 +11,7 @@ def seleccion_por_ruleta(population):
     # 1. Calcular la suma total de todos los valores de aptitud de la población.
     total_fitness = 0
     for individuo in population:
+        individuo.encode()
         total_fitness += individuo.fitness    
 
     print(f"Total de fitness: {total_fitness}")

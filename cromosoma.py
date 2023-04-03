@@ -49,5 +49,6 @@ class Cromosoma:
               + f"Fitness {self.fitness}")
         
     def ajustarValores(self):
+        self.decode()
         self.vector_solution = ajust.repair_solution(self.vector_solution, self.lim_inf, self.lim_sup)
         self.encode()

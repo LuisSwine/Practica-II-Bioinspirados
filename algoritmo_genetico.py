@@ -36,17 +36,18 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
     #APLICAMOS LA CRUZA
     hijos = []
     if cruza_method == 1:
-      hijos  = cruza.cruza_dos_puntos(poblacion_inicial.poblacion, indices_padres)
+      hijos  = cruza.cruza_dos_puntos_bin(poblacion_inicial.poblacion, indices_padres)
       #print(f"Hijos: {hijos}")
     elif cruza_method == 2:
-      hijos = cruza.cruza_uniforme(poblacion_inicial.poblacion, indices_padres, prob_cruza)
+      hijos = cruza.cruza_uniforme_bin(poblacion_inicial.poblacion, indices_padres, prob_cruza)
       #print(f"Hijos: {hijos}")
       
     #Convertimos cada vector hijo en un objeto de la clase cromosoma para acceder a todos sus atributos
     cromosomas_hijos = []
     for hijo in hijos:
       new_hijo = cromosoma.Cromosoma(lim_inf, lim_sup, dimensiones, poblacion_inicial.step_size, poblacion_inicial.num_steps, poblacion_inicial.cromosomas_length)
-      new_hijo.vector_solution = hijo
+      #new_hijo.vector_solution = hijo
+      new_hijo.bin_code = hijo
       new_hijo.ajustarValores()
       cromosomas_hijos.append(new_hijo)
     hijos = []
@@ -92,7 +93,7 @@ if __name__ == "__main__":
   lim_inf = -5.12
   lim_sup = 5.12
   tam_poblacion = 20
-  function = functions.ackleyFunction
+  function = functions.esfera
   cruza_method = 2
   prob_mutacion = 0.01
   prob_cruza = 0.5
