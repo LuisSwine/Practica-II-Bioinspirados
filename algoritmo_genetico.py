@@ -13,7 +13,7 @@ import cromosoma
 #Importamos las librerias
 import matplotlib.pyplot as plt
 
-def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cruza_method, prob_mutacion, prob_cruza):
+def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cruza_method, prob_mutacion, prob_cruza, prefijo,i):
   
   #PRIMERO GENERAMOS LA POBLACION INICIAL
   poblacion_inicial = poblacion.Poblacion(tam_poblacion, dimensiones, lim_inf, lim_sup)
@@ -31,7 +31,10 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
   val_prom = poblacion_inicial.getProm()#(mejores[0].fitness + peores[0].fitness) / 2
   promedio.append(val_prom)  
   
-  while sr.stop_requeriment(0, mejores[-1], 0.001) and sr.second_stop_option(mejores[-1], peores[-1], 0.001):
+  compare = True
+  parada = ''
+  
+  while compare:
     #CREAMOS LAS PAREJAS OBTENIENDO LA LISTA DE INDICES SELECCIONADOS EN ESTE CASO POR RULETA
     indices_padres = ps.seleccion_por_ruleta(poblacion_inicial.poblacion)
     #print(f"Indices: {indices_padres}")
@@ -88,11 +91,17 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
     print(peores[-1].fitness)
     print(promedio[-1])
     
-    #input('PRESIONE...')
+    one_stop = sr.stop_requeriment(0, mejores[-1], 0.001)
+    two_stop = sr.second_stop_option(mejores[-1], peores[-1], 0.001)
+    compare = one_stop and two_stop
+    
+    if one_stop == False: parada = 'Convergencia'
+    if two_stop == False: parada = 'Diferencia'
     
   # Graficar los resultados
   generaciones = range(len(mejores))
 
+  plt.clf()
   plt.plot(generaciones, [cromo.fitness for cromo in mejores], label='Mejores')
   plt.plot(generaciones, [cromo.fitness for cromo in peores], label='Peores')
   plt.plot(generaciones, promedio, label='Promedio')
@@ -102,23 +111,31 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
   plt.title('Resultados del algoritmo genético')
   plt.legend()
 
-  plt.show()
-  pass
+  ruta = prefijo + str(i) + '.png'
+  plt.savefig(ruta)
+  
+
+  return mejores[-1].fitness, peores[-1].fitness, promedio[-1], parada
 
 if __name__ == "__main__":
   
   dimensiones = 5
-  lim_inf = -32.768
-  lim_sup = 32.768
+  lim_inf = -5.12
+  lim_sup = 5.12
   tam_poblacion = 20
-  function = functions.ackleyFunction
+  function = functions.esfera
   cruza_method = 2
-  prob_mutacion = 0.01
   prob_cruza = 0.5
+  prob_mutacion = 0.01
+  prefijo = 'Esfera-20-05-001/Cruza-2/'
+  file_path = prefijo + 'stats.txt'
+  file = open(file_path, 'w')
+  file.write('mejores,peores,promedios,parada')
   
-  algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, function, cruza_method, prob_mutacion, prob_cruza)
+  for i in range(20):
+    mejor, peor, promedio, parada = algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, function, cruza_method, prob_mutacion, prob_cruza, prefijo,i)
+    fila = str(mejor) + ',' + str(peor) + ',' + str(promedio) + ',' + parada
+    file.write('\n')
+    file.write(fila)
 
-    
-
-
-
+  file.close()
