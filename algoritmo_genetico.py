@@ -10,6 +10,9 @@ import survivors_selection as ss
 import poblacion
 import cromosoma
 
+#Importamos las librerias
+import matplotlib.pyplot as plt
+
 def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cruza_method, prob_mutacion, prob_cruza):
   
   #PRIMERO GENERAMOS LA POBLACION INICIAL
@@ -86,6 +89,20 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
     print(promedio[-1])
     
     #input('PRESIONE...')
+    
+  # Graficar los resultados
+  generaciones = range(len(mejores))
+
+  plt.plot(generaciones, [cromo.fitness for cromo in mejores], label='Mejores')
+  plt.plot(generaciones, [cromo.fitness for cromo in peores], label='Peores')
+  plt.plot(generaciones, promedio, label='Promedio')
+
+  plt.xlabel('Generaciones')
+  plt.ylabel('Aptitud')
+  plt.title('Resultados del algoritmo genético')
+  plt.legend()
+
+  plt.show()
   pass
 
 if __name__ == "__main__":
