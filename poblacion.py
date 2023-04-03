@@ -50,3 +50,10 @@ class Poblacion:
         best = poblacion_ordenada[-1]
         return best
     
+    def getProm(self):
+        sumatoria = 0
+        for individuo in self.poblacion:
+            sumatoria += individuo.fitness
+        prom = sumatoria / len(self.poblacion)
+        return prom
+        

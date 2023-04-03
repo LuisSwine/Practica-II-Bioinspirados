@@ -25,7 +25,7 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
   
   mejores.append(poblacion_inicial.getBest(funcion))
   peores.append(poblacion_inicial.getWorst(funcion))
-  val_prom = (mejores[0].fitness + peores[0].fitness) / 2
+  val_prom = poblacion_inicial.getProm()#(mejores[0].fitness + peores[0].fitness) / 2
   promedio.append(val_prom)  
   
   while sr.stop_requeriment(0, mejores[-1], 0.001) and sr.second_stop_option(mejores[-1], peores[-1], 0.001):
@@ -77,12 +77,13 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
     #Procedemos a sacar los mejores y peores candidatos
     mejores.append(poblacion_inicial.getBest(funcion))
     peores.append(poblacion_inicial.getWorst(funcion))
-    val_prom = (mejores[-1].fitness + peores[-1].fitness) / 2
+    val_prom = poblacion_inicial.getProm()#(mejores[-1].fitness + peores[-1].fitness) / 2
     promedio.append(val_prom)
     
       
     print(mejores[-1].fitness)
     print(peores[-1].fitness)
+    print(promedio[-1])
     
     #input('PRESIONE...')
   pass
@@ -90,10 +91,10 @@ def algoritmoGenetico(dimensiones, lim_inf, lim_sup, tam_poblacion, funcion, cru
 if __name__ == "__main__":
   
   dimensiones = 5
-  lim_inf = -5.12
-  lim_sup = 5.12
+  lim_inf = -32.768
+  lim_sup = 32.768
   tam_poblacion = 20
-  function = functions.esfera
+  function = functions.ackleyFunction
   cruza_method = 2
   prob_mutacion = 0.01
   prob_cruza = 0.5
